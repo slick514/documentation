@@ -1,0 +1,71 @@
+Most of this is based around Linux.  If you are using Windows, use PuTTY and follow the directions found here:
+https://www.howtoforge.com/ssh_key_based_logins_putty
+
+Open or Create an "/etc/hosts" file
+Create aliases/shortcuts to call your remote device(s).  Associate them with (static) ip addresses of the devices that you will be accessing.  You can call the same IP multiple names...
+
+  192.168.0.4 mypi
+  192.168.0.4 some_other_name <optional>
+
+Ensure that SSH is installed/enabled on your remote device(s)
+
+Verify that you can log into your remote device (this example assumes the default user on your device: "pi")
+
+  ssh pi@mypi
+  
+If there is no entry for the hostname in ~/.ssh/known_hosts, you will be prompted on whether or not to add it
+If there is a conflict with an existing entry in ~/.ssh/known_hosts, you will need to resolve the conflict.  Edit known_hosts and remove any conflicting entries that correspond to the hostname that you are attempting to reach
+
+type "exit" to exit back to your client system.
+
+We don't need to use a password if we generate an ssh key and use it:
+  
+  ssh-keygen -t rsa -f id_mypi_rsa
+
+Don't worry about a passphrase
+
+If you enter anything other than the default as the filename, you will need to add IdentityFile entries to /etc/ssh/ssh_config.  These entries are defaults that the system will try to use to connect; these entries are unnecessary/overridden if you define IdentityFile entries in your ~/.ssh/config file
+
+  IdentityFile ~/.ssh/id_rsa
+  IdentityFile ~/.ssh/id_dsa
+  IdentityFile ~/.ssh/id_mypi_rsa
+
+create the .ssh directory on the remote device:
+
+  ssh pi@mypi mkdir -p .ssh
+  
+copy your public key up to the pi's authorized_keys file
+
+  cat ~/.ssh/id_mypi_rsa.pub | ssh pi@mypi -o PubkeyAuthentication=no 'cat >> .ssh/authorized_keys'
+  
+Let's nix having to enter the username and password:
+Alter/Create the ~/.ssh/config file
+
+  touch ~/.ssh/config
+  
+Add lines as follows:
+  Host mypi
+  Port 22
+  User pi
+  IdentityFile ~/.ssh/my_key_rsa
+  
+Ensure that you have proper permissions on the config file
+  sudo chmod 600 ~/.ssh/config
+  
+You should now be able to ssh or scp in using just the hostname
+
+  ssh mypi
+  <ping!  You're in!>
+  
+or
+
+  scp myfile.txt mypi:~/.
+  <file uploaded to the user's root directory on mypi>
+  
+Give your remote server a unique identity, so that you're not confused.
+
+ssh into your device (if you are not already connected)
+
+edit the /etc/hostname file and change the name to something you like
+edit the /etc/hosts file and change the line associated with "192.0.1.1" to match your new name
+reboot your device

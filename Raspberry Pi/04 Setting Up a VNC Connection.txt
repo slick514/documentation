@@ -1,0 +1,56 @@
+from the command line interface on your Pi, install tightvnc server
+
+  sudo apt-get install tightvncserver -y
+  
+after the installation is complete, type the following
+
+  vncserver
+  
+You will be prompted for a password that you will use to log in via vnc from a remote client.
+
+The server should now be running on your Pi; it's listening on port 5901
+
+On the client (remote) side, you will need a VNC client-program in order to interface with your Pi.  One of the easiest solutions is to install the VNC client extention for Chrome
+
+Chrome 
+--> drop-down (three vertical dots near the upper right corner of the window
+  --> More Tools
+    --> Extensions
+      --> More Extensions (scroll ALL THE WAY DOWN)
+        --> You're now in the store.  Search for VNC.  I chose VNC Viewer for Google Chrome, but you have options
+        
+Open the Extension.  It'll show up under "apps" in the chrome toolbar, which for some reason only appears in a brand new tab for me... *shrugs*
+Log in to your Pi, using <StaticIp>:5901 as the address (e.g. 192.168.0.4:5901, if your ip was 192.168.0.4), and the password that you stipulated while setting up the server.
+
+To make it so that the VNC server automatically starts when the Pi boots up, perform the following actions:
+
+Create the following script, and save it as /etc/init.d/tightvncserver
+
+  #!/bin/sh
+  # /etc/init.d/tightvncserver
+  # Thanks to Neil Black at www.neil-black.co.uk/raspberry-pi-beginners-guide
+  VNCUSER='pi'
+  case "$1" in
+     start)
+        su $VNCUSER -c '/usr/bin/tightvncserver :1'
+        echo "Starting TightVNC Server for $VNCUSER "
+        ;;
+     stop)
+        pkill Xtightvnc
+        echo "TightVNC Server stopped"
+        ;;
+     *)
+        echo "Usage: /etc/init.d/tightvncserver {start|stop}"
+        exit 1
+        ;;
+  esac
+  exit 0
+
+change the files permissions so that it is executable
+
+  sudo chmod a+x "/etc/init.d/tightvncserver"
+  sudo update-rc.d tightvncserver defaults
+  
+If you ever want to stop this service from running on boot, type the following
+
+  sudo update-rc.d tightvncserver remove

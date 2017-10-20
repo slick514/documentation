@@ -1,0 +1,27 @@
+# Xdebug is a PHP extension for debugging and profiling; it should be used only in development environments
+# PHP's native debugging is somewhat limited, and Xdebug can provide context/info for fatal errors that would otherwise be inaccessible.  Xdebug can also profile code down to the line, which can help ID bottlenecks
+sudo apt-get -y install php5-xdebug
+...
+sudo service apache2 restart
+
+# Navigate to the errors page:  http://sandbox.ubuntu.dev:8083/errors.php
+# Errors now have additional information, including a stacktrace(!)  Yay!!!
+
+# Xdebug costs time/resources, so turn it off if you aren't using it
+sudo php5dismod xdebug
+sudo service apache2 restart
+
+# Use "usdo php5enmod xdebug" to re-enable;  must restart apache after
+
+# Use xdebug to profile:  This is not enabled by default
+# Enable the trigger for profiling
+sudoedit /etc/php5/mods-available/xdebug.ini
+
+# Add the following two lines
+#	xdebug.profiler_enable_trigger = 1
+#	xdebug.profiler_output_dir = /tmp/cachegrind
+
+# Add the profiler output directory and restart Apache
+mkdir /tmp/cachegrind
+sudo chown www-data: /tmp/cachegrind
+sudo service apache2 restart

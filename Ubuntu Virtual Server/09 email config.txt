@@ -1,0 +1,25 @@
+# Using "exim" as our email server.
+sudo apt-get install -y exim4
+...
+sudo dpkg-reconfigure exim4-config
+
+# Server Type: smarthost + smtp
+# System mail name: <host-name>
+# Listening ip address: 127.0.0.1 ; ::1
+# Other destinations: <your host name>
+# Machines to relay for: <blank>
+# Smarthost ip address: smtp.gmail.com::587
+# Hide local mail name: No
+# DNS Queries: No
+# Delivery method: Mbox
+# Split config?: No
+
+# edit /etc/exim4/passwd.client; add the following lines
+# 	*.google.com:<user-name>@gmail.com:<password>
+# 	*.gmail.com:<user-name>@gmail.com:<password>
+
+sudo /etc/init.d/exim4 reload
+	
+# attempt to send mail, and check that it was recieved...
+
+echo "Subject: test" | sendmail -v <recipient email>

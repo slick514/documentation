@@ -1,0 +1,70 @@
+# install etckeeper
+sudo apt-get -y install etckeeper
+...
+
+# Version control is initially set to "bzr".  Change it to git
+sudoedit /etc/etckeeper/etckeeper.conf
+
+# Uncomment/comment/alter lines to mirror the following
+#	VCS="git"
+#	#VCS="bzr"
+#	...
+#	PUSH_REMOTE="origin"
+
+# Create a public/private key for root
+sudu su
+ssh-keygen -t rsa
+<defaults>
+...
+cp ~/.ssh/id_rsa.pub ~jgries/gitolite-admin/keydir/root.pub
+chown jgries:jgries ~jgries/gitolite-admin/keydir/root.pub
+exit
+
+# Add a repo for etckeeper
+sudoedit ~/gitolite-admin/conf/gitolite.conf
+
+#	repo		etckeeper
+#			RW+	=	root
+#			R	=	gitweb
+#			config gitweb.description = "test.ubuntu.dev /etc"
+
+# commit changes and push
+git config --global push.default simple
+git add .
+git commit -am "added etckeeper repo"
+git push origin master
+
+# Login as root and configure things
+sudo su
+git config --global user.email root@test.ubuntu.dev
+git config --global user.name root
+git config --global push.default simple
+
+# initialize etckeeper and commit
+cd /etc
+etckeeper init
+...
+git remote add origin git@localhost:etckeeper.git
+etckeeper commit "Initial commit."
+exit
+
+# Alter the system configuration and add those changes using etckeeper
+sudoedit /etc/update-motd.d/20-lynda
+
+# Add a message of the day
+#	#!/bin/sh
+#	echo "Some message..."
+
+# Make the file executable
+sudo chmod a+rx /etc/update-motd.d/20-lynda
+etckeeper commit "Added a message of the day"
+
+# If you screw up your config in some way, restore to latest commit using
+sudo git reset --hard HEAD
+
+# All commands using etckeeper will need to be performed using sudo
+cd /etc
+sudo git log --pretty=oneline
+# Output below:
+#	cd09feee927498c49a2b4f1c0c40c53299c7af40 updated MOTD
+#	98acb7f70bbe68c23db80b332342585147dd34c5 Initial commit.

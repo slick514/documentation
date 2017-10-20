@@ -1,0 +1,69 @@
+# You need to go get an "iso" image for booting your OS!
+
+#VM configuration
+* Linux VM
+* Virtual Box Disk-Image (VDI)
+* Fixed Size (8G)
+* 4G RAM = 4096MB
+* Settings
+	* System > Processor
+		* 2 CPUs (Maybe more.  You will get an error if you exceed the number of actual CPUs that you have on your host system)
+		* Enable PAE/NX (Physical Address Extension)
+		* Storage Tree
+	* Storage > Controller: IDE
+		* Select Disc image in Attributes (Right Side)
+		* Check "Live CD/DVD"
+	* Display
+		* Check "Enable 3D Acceleration
+	* Audio
+		* Uncheck (un-needed)
+	* Network > Adapter 1 (Enable if unenabled)
+		* Advanced > Port Forwarding
+			* HTTP host (8082) -> 80
+			* SSH host (2222) -> 22
+			* MySQL host (9306) -> 3306
+	* Shared Folders
+		* Add Shared Folder(s)
+		* Check "Auto-Mount"
+
+# Start Server
+* Click "Start"
+* Choose your iso image to boot from...
+* Left-Command to get rid of keyboard-capture message
+* Installation Language Prompt:	English <Enter>
+* Installation-Type Prompt:
+	* F4 -> 
+		* Select "Minimal VM Install"-option.  <Enter>
+* OS Language prompt: 			English <Enter>
+* "Choose Country prompt: 		United States <Enter>
+* "Detect Keyboard" prompt: 		Default (No) <Enter>
+* "Choose Keyboard" prompt: 		English (US) <Enter>
+* "Keyboard Type" prompt:		English (Macintosh) <Enter>
+...
+* "Hostname" prompt:			"mycomputor.ubuntu.dev" (or similar) <Enter>
+* "Full username" prompt:		<User's full name> <Enter>
+* "Username" prompt:			<user-name> <Enter>
+* "Password" prompt:			<password> <Enter>
+* "Repeat Password" prompt:		<password> <Enter>
+...
+* "Timezone confirmation" prompt:	<Yes/No> <Enter>
+...
+* "Disk Partitioning" prompt:		Guided - use entire disk <Enter>
+* "Select Partition" prompt:		<Enter> (partition is auto-selected)
+* "Write changes?" prompt:		<Yes> <Enter>
+...
+* "Http Proxy information" prompt:	<blank/none> <Enter>
+...
+* "System Upgrades" prompt:		Install security updates automatically <Enter>
+...
+* "Server Options" prompt:		Check the following, then <Continue><Enter>
+	* OpenSSH Server
+	* LAMP Server
+...
+* "MySQL passwd" prompt:			<root passwd><Enter>
+* "MySQL passwd" prompt (conf.):	<root passwd><Enter>
+...
+* "GRUB boot loader" prompt:		<yes>(?)<Enter>
+* "Installation Complete" prompt:	<Continue><Enter>
+
+#Done!		

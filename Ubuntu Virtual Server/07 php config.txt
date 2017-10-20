@@ -1,0 +1,28 @@
+# create a custom configuration file (custom.ini) in /etc/php5/mods-available
+# content as follows:
+
+#	; Custom shared config
+#	; priority=01
+#	error_reporting = E_ALL
+#	display_errors = On
+#	error_log = /var/log/php_errors.log
+#	log_errors_max_len = 0
+#	memory_limit = 256M
+#	post_max_size = 100M
+#	upload_max_filesize = 100M
+
+# enable the custom module
+sudo php5enmod custom
+
+# create the php error-log file
+sudo touch /var/log/php_errors.log
+
+# change the owner & group of the error-log to www-data (apache)
+sudo chown www-data: /var/log/php_errors.log
+
+# include support for internationalization, encryption, and sqlite
+sudo apt-get install -y php5-intl php5-sqlite php5-mcrypt
+
+# enable support for encryption and restart apache for changes to take effect
+sudo php5enmod mcrypt
+sudo service apache2 restart

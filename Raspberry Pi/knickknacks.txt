@@ -1,0 +1,96 @@
+icons are located here:
+/usr/share/icons/...
+e.g.: /usr/share/icons/gnome/48x48/apps/terminal.png
+
+To preclude using auth-keys during ssh:
+ssh <user>@<location> -o PubkeyAuthentication=no
+
+enable desktop icons:
+$ dconf-editor
+navigate org > gnome > desktop > background
+check "show-desktop-icons"
+
+Create desktop icons:
+Create '*.desktop' file:  e.g.: "myApp.desktop"
+File format:
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name[en_US]=Terminal
+Exec=gnome-terminal
+Icon=/usr/share/icons/gnome/48x48/apps/terminal.png
+
+Install applications in "/opt"
+
+add an existing user to a group
+$ usermod -aG <group> <user>
+
+Install Google Chrome:
+$ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+$ sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+$ sudo apt-get install -f
+$ sudo apt-get install -fy libcanberra-gtk-module libxss1 libappindicator1 libindicator7
+$ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+Download the latest '.deb' file (for debian) and navigate to the directory where that file was saved.
+$ sudo dpkg -i google-chrome-stable_current_amd64.deb
+Command to start chrome is "google-chrome"
+
+add repository information to /etc/apt
+e.g.: 
+$ cd /etc/apt/sources.list.d
+$ sudo nano kivy.list
+... add repository info...
+
+kivy installation
+add the following line to a repository file (kivy.list)
+	deb http://ppa.launchpad.net/kivy-team/kivy/ubuntu trusty main
+$ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A863D2D6
+$ sudo apt-get update
+$ sudo apt-get install -y \
+git \
+python3 \
+python3-dev \
+python3-kivy \
+python3-pip \
+libav-tools \
+libsdl2-dev \
+libsdl2-image-dev \
+libsdl2-mixer-dev \
+libsdl2-ttf-dev \
+libportmidi-dev \
+libswscale-dev \
+libavformat-dev \
+libavcodec-dev \
+zlib1g-dev
+
+on the raspberry pi, you will need the following packages as well:
+sudo apt-get install -y \
+pkg-config \
+libgl1-mesa-dev \
+libgles2-mesa-dev \
+python-setuptools \
+libgstreamer1.0-dev \
+git-core \
+gstreamer1.0-plugins-good \
+gstreamer1.0-plugins-bad \
+gstreamer1.0-plugins-ugly \
+gstreamer1.0-plugins-base \
+gstreamer1.0-omx \
+gstreamer1.0-alsa \
+python-dev \
+libmtdev-dev \
+xclip
+
+To enable mouse/touch input on the pi, edit the "[input]" section of ~/.kivy/config.ini:
+[input]
+mouse = mouse
+%(name)s = probesysfs,provider=hidinput
+mtdev_%(name)s = probesysfs,provider=mtdev
+hid_%(name)s = probesysfs,provider=hidinput
+
+$ pip3 install --upgrade pip virtualenv setuptools
+$ virtualenv --no-site-packages -p /usr/bin/python3 kivy
+$ pip3 -I install Cython==0.23
+$ pip3 install kivy

@@ -1,0 +1,18 @@
+>>> from tkinter import *
+>>> from tkinter import ttk
+>>> root = Tk()
+
+>>> checkbutton = ttk.Checkbutton(root, text = 'Spam?')
+>>> checkbutton.pack()
+
+>>> spam = StringVar()
+>>> spam.set('Spam!)
+>>> spam.get()
+'Spam!'
+>>> breakfast = StringVar()
+>>> ttk.Radiobutton(root, text = 'SPAM', variable = breakfast, value = 'SPAM').pack()
+>>> ttk.Radiobutton(root, text = 'Eggs', variable = breakfast, value = 'Eggs').pack()
+>>> ttk.Radiobutton(root, text = 'Sausage', variable = breakfast, value = 'Sausage').pack()
+>>> breakfast.get()
+<it'll display whatever you have selected in the GUI>
+>>> checkbutton.config(textvariable = breakfast)

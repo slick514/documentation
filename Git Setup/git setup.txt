@@ -1,0 +1,69 @@
+1a. Create a 'git' user
+
+1b. Create user accounts for your users
+	* Append each user's ssh keys to the "git" user's 'authorized_keys' and 'authorized_keys2' files, as appropriate
+
+2. On your GIT repository server, create your repository.  I've set up the /srv/git directory as our root repo, but really this could be anywhere... Just make sure that wherever you put it is owned by git:git
+	* Create a project root on your server, under git:git
+		sudo mkdir /srv/git
+		sudo chown git:git /srv/git
+	* Change users to "git" (or whatever user Git is running under)
+		su git
+	* I'm not sure what the access privileges need to be here, so I set things to "744";  (drwxrwxr--)
+	* Create your new project root and navigate there
+		mkdir /srv/git/myproject
+		cd /srv/git/myproject
+	* Initialize your repo with the '--bare' option.
+		git init --bare
+		
+3. On your local system, create and push a commit
+	* Setup the git global user identifiers:
+		git config --global user.name "Bob Somebody"
+		git config --global user.email bsomebody@ussinnovate.com
+	* Create and push a commit
+		mkdir myproject
+		cd myproject
+		git init
+		git add .
+		git commit -m 'initial commit'
+		git remote add origin git@jnet:/srv/git/myproject
+		git push origin master
+		
+4. You should now be able to move to another directory and clone your repository
+	cd /my/new/directory
+	git clone git@jnet:/srv/git/myproject mynewprojectname
+	cd mynewprojectname
+	
+5a. Ok, now we have to set up for windows.  Yay windows.
+	* Go download PuTTY.  Install it.  Yay.
+	* Download and install TortoiseGit
+	* Use PuttyGen to generate a public/private key pair.
+		* Save the private key somewhere
+		* During the key generation, the text of the public key will be displayed.  It's in a section titled "Public key for pasting into OpenSSH authorized_keys file".  Cut that text and paste that into an otherwise blank document somewhere... save it in the same place that you saved the private key.
+	* Append that text to the authorized_keys2 file for the "git" user on the git server
+		cat <path to your openssh key text file> | ssh git@jnet 'cat >> .ssh/authorized_keys2'
+	* Open a file browser window and navigate to the directory where you want to create/clone your repository
+	* Right click and choose "Git Clone"
+	* In the URL field, type "ssh://<git user>@<git server address></path/to/repository>
+	* Check the "Load Putty Key" field, and point it to your PRIVATE key
+	* Pray that it works.
+	
+5b.	If you are setting up a new git repo and you want to push to the empty repository for the first time, you'll need to specify the origin via the TortoiseGit interface
+	* Create your directory in your file system
+	* Move to your directory root and initialize your repository
+		<right-click> --> "Create Git Repository Here..."
+		Do NOT check the "make bare" option; click "ok"
+	* add a file or something... add it and commit it
+	* right click --> Tortoise Git --> Settings
+	* Choose "Git" --> Remote
+	* Add a remote.
+		Remote: Origin
+		URL: ssh://git@192.168.1.84/srv/git/reponame.git
+		Push URL: ssh://git@192...<same as above>
+		Click "Add New/Save"
+		Putty Key: Point this to your private key
+		
+		
+		
+
+	

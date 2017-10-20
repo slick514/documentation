@@ -1,0 +1,23 @@
+# Update packages
+sudo apt-get update
+
+# Upgrade everything
+sudo apt-get upgrade -y
+
+# Get the basics
+#	* build-essential: Compiling tools
+#	* linux-headers-virtual: Define interfaces between OS components
+#		On Debian, I installed "linux-headers-3.16.0-4-all" instead.
+#		Run "apt-cache search linux-headers" to get a list of candidates
+#	* dkms: "Dynamic Kernal Module Support" (makes it easier to update virtual systems)
+#	* nano: Text editor
+#	* zip, unzip: File compression
+#	* wget, curl: Downloading files
+#	* man-db: Program manuals for executables
+#	* acpid: "Advanced Configuration & Power Interface Event-Daemon": allows graceful 
+shutdown via VirtualBox's power button
+sudo apt-get install -y build-essential linux-headers-virtual dkms nano zip unzip wget curl man-db acpid
+
+# On Debian:
+# Ensure that entries in /etc/apt/sources.list end with 'main contrib' not just 'main'
+sudo apt-get install virtualbox-guest-dkms virtualbox-guest-x11 linux-headers-$(uname -r)

@@ -1,0 +1,64 @@
+Plug in at LEAST a mouse and keyboard (USB).  If you have room, add wireless networking, but that's not super critical yet.
+
+Boot your Pi from a recently formatted/created NOOBS image.  Even if you bought a system that came with a NOOBS installation SDCard, you might want to consider wiping and re-imaging it; otherwise, when you run the initial update after installation, the wait can be... "substantial"
+
+Choose the operating system.  I prefer Raspbian.  Things should start setting up.  Go home and sleep.  Come back the next day...
+
+You should now have a GUI to work with.  Great.  Use the following "diagram" to perform some basic setup tasks.
+Click on the "Raspberry" symbol to the upper left of your screen.
+--> Preferences
+  --> Mouse & Keyboard Settings
+    --> Keyboard (Tab)
+      --> Keyboard Layout (Button)
+        Choose "United States" as the country;  Choose "English (US)" as the Variant.  
+        There is an area at the bottom of the dialogue where you can type some text to test.  DO check out some characters.  I was having problems with the "pipe" (|) character, and the single-quote character...
+        Save and exit.
+  --> Raspberry Pi Configuration
+    --> System (Tab)
+      --> Change Password (Button)
+        Change your password.  The default/initial password is "raspberry"
+    --> Interfaces (Tab)
+      Click to Enable SSH from the menu.
+
+Reboot the Pi.  If you did not have enough USB ports to start off with WiFi, turn off the pi, insert a WiFi wart into one of your USB ports, and restart.
+You can "hot swap" a keyboard and mouse, but every time I've tried to plug in a WiFi wart it causes a rather abrupt system restart.  I don't know if this is dangerous, but why take a risk...
+
+Setting up networking properly, with a static IP, depends on using the latest version of Raspbian.  Older builds used the interfaces file, whereas the newer versions focus on the dhcpcd.conf file
+Most of the following was gleaned from this walkthrough:
+http://raspberrypi.stackexchange.com/questions/37920/how-do-i-set-up-networking-wifi-static-ip-address
+
+Upon reboot, you should see a WiFi indicator in the upper right corner.  Right-click it, configure the "SSID" and choose your connection of preference.
+Clicking on the wifi indicator again should let you pick your network and enter the WPA password.
+Verify that you can connect to the internet. (Open a web browser and go to a site, or something)
+
+If you did not know the required information for setting up a static IP address, find that information now:
+Open a command line interface (CLI) window and type the following:
+
+  ip -4 addr show dev wlan0 | grep inet
+
+The 2nd chunk of numbers that looks like an ip address is the broadcast address of the network
+e.g.: inet 192.168.1.210/24 brd 192.168.1.255 scope global wlan0
+For that output, "192.168.1.255" is your broadcast address
+
+
+  ip route | grep default | awk '{print $3}'
+
+This yields the address of your router/gateway
+  
+  cat /etc/resolv.conf
+  
+The value following "nameserver" is your DNS server address
+
+Click on the wifi interface icon again, choose "interface" instead of "SSID" and select "wlan0".  Set up your static ip address there, using the information that you just gathered. 
+
+running "ifconfig" now from the CLI, you should see the wlan0 interface associated with the ip address that you specified.
+
+From the CLI, run the following, to update/upgrade all of your software
+
+  sudo apt-get update -y
+  ... {wait for a while...}
+  sudo apt-get upgrade -y
+  ... {wait for a while...}
+  
+There, you're basically up and running.  
+Now set up SSH and VNC access so that you no longer have to have a mouse/keyboard (Next document)

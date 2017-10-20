@@ -1,0 +1,16 @@
+# CodeIgniter is an open-source Web-Development framework
+
+# Get the source code and install code-igniter
+cd /media/sf_sandbox
+wget --content-disposition https://github.com/bcit-ci/CodeIgniter/archive/3.<x>.<y>.zip
+unzip CodeIgniter-3.<x>.<y>.zip
+mv CodeIgniter-3.<x>.<y> codeigniter
+rm CodeIgniter-3.<x>.<y>.zip
+
+# Alter applicable database connection information to the $db['default']-map in "/codeigniter/application/config/database.php"
+
+# Alter "/codeigniter/application/config/autoload.php": Autoload the database
+# Add an entry to the $autoload['libraries'] map:
+#	$autoload['libraries'] = array('database');
+
+# Add a link on the dashboard...

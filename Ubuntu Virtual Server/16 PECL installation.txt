@@ -1,0 +1,14 @@
+# PECL is a repository for PHP extensions
+# It shares PEAR infrastructure; similar to apt-get as far as commands go...
+
+sudo pecl install uploadprogress
+
+# Create a file for the mod: "/etc/php5/mods-available/uploadprogress.ini"
+# Add one line:
+#	extension=uploadprogress.so
+
+# Enable the mod
+sudo php5enmod uploadprogress
+
+# Re-start Apache
+sudo service apache2 restart

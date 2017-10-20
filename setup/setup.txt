@@ -1,0 +1,30 @@
+* Configure wifi so that you are actually talking to the internet.  Don't assume that just because you had connectivity during install that you automatically have it when you log in
+	* Broadcast ID:	192.168.1.255
+	* Router: 	192.168.1.2
+	* DNS:		192.168.1.252
+
+* Install sudo and add user to sudo group
+	* Change user to root
+		$ su
+		<enter root password at prompt>
+	* Install sudo
+		$ apt-get install --fix-missing sudo
+	* Add user to sudoers (sudo) group
+		$ usermod -a -G sudo <username>
+	* Return to "normal" user
+		$ exit
+	* Log out and log back in so that new user group is recognized
+* Enable desktop icons
+	$ gsettings set org.gnome.desktop.background show-desktop-icons true
+
+* Install git
+	$ sudo apt-get install git
+* Clone documentation from git repository
+	* Add git address to /etc/hosts by appending the following line to that file
+		192.168.1.84	git
+	* Clone documentation repo
+		$ cd
+		$ git clone git@git:/srv/git/documentation
+		<enter git password: "g1tp@$$">
+* Run setup.sh
+

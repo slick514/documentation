@@ -1,0 +1,21 @@
+# * On the HOST system, download and install SourceTree
+# * Open SourceTree and Create a Local-Repository
+#	+ New Repository > Create Local Repository
+#		Destination Path: "~/Desktop/.../dashboard"
+#		...
+#		Type: Git
+
+# * Link the local repo to the one on the development server:
+# * Find the repository that you just created: Double-click it to open the history
+# * Menu > Repository > Add Remote
+# 	* Remote Name: "origin"
+#	* URL/path: "ssh://git@sandbox.dev:2223/dashboard.git"
+#	* "ok" > "ok"
+# * Commit:
+#	* "Commit"-button
+#		* Commit Mode: "All files, ..."
+#		* Check the files that you want to check in
+#		* Write a comment
+#		* Check "Push Changes immediately to Origin/Master"
+#	* Add it to version control?: Yes
+

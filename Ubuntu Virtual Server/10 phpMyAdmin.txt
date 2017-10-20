@@ -1,0 +1,26 @@
+# mySQL client used for debugging sql queries
+# not appropriate for production environments
+
+sudo apt-get install -y phpmyadmin
+...
+# configuration prompt choices:
+# web-server: apache2 (space-bar to select)
+...
+# Configure with dbconfig-common?:  Yes
+...
+# mysql application password: <password>
+# confirm
+# db-admin password: <mysql db admin password>
+
+# Configure client auto-login (never on production)
+sudoedit /etc/phpmyadmin/config.inc.php
+
+# Search (Ctrl-W) for "Authentication":  Change the content as follows
+#	/* Authentication type */
+#	$cfg['Servers'][$i]['auth_type'] = 'config';
+#	$cfg['Servers'][$i]['user'] = 'root';
+#	$cfg['Servers'][$i]['password'] = '<password>';
+
+# Navigate to phpmyadmin:
+# <hostname>:<http-port>/phpmyadmin (sandbox.ubuntu.dev:8082/phpmyadmin)
+# generate any missing tables, per prompts (this doesn't work, but *shrug* apparently it is not a big deal)

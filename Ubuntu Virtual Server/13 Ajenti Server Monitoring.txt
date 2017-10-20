@@ -1,0 +1,40 @@
+# Security risk in a production environment (don't!).
+
+# This for automatic install:
+wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-ubuntu.sh | sudo sh
+# enter sudoers password when things apparently hang
+
+- OR - this for manual
+
+# add the ajenti key to the list of repository keys for apt
+wget http://repo.ajenti.org/debian/key -O- | sudo apt-key add -
+# if hanging with no prompt, enter sudo password
+
+# add the ajenti repository to the list of available repositories
+echo "deb http://repo.ajenti.org/ng/debian main main ubuntu" | sudo tee -a /etc/apt/sources.list
+
+# update apt-get to recognize new available packages, then install ajenti:
+sudo apt-get update
+...
+sudo apt-get install -y ajenti
+...
+
+# start ajenti:
+sudo service ajenti restart
+
+# Add a port-forwarding rule for Ajenti in the virtual-server setup (8000->8000)
+
+# Log into Ajenti from a browser:  Take note of the requirement for SSL (https)
+# https://sandbox:8000
+# ignore security warnings (we are using a self-signed cert.)
+# default user:pass are "root" and "admin", respectively
+
+# Secure the server:
+#	* Click "Configure".
+#	* Under "Users", change the root password, and maybe alter the email.
+#	* Click "Restart" (bottom of page) to restart Ajenti and enable changes.
+#	* Log back in.
+
+# Add an Ajenti shortcut to our dashboard shortcuts
+# 	* In phpMyAdmin, add a line to the shortcuts table:
+#		* path -> https://sandbox:8000	; label -> Ajenti

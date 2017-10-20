@@ -1,0 +1,52 @@
+# Alter host's /etc/hosts file
+# Add an arbitrary host-name for your virtual machine to the 127.0.0.1 line.
+# e.g.:
+127.0.0.1 localhost sandbox.ubuntu.dev
+
+---
+
+# Log in using SSH
+# ssh -p<port> <username>@<hostname>
+# e.g.:
+ssh -p2222 jgries@sandbox.ubuntu.dev
+# if there is no entry for the hostname in ~/.ssh/known_hosts, prompt for addition
+# if there is a conflict with an existing entry in ~/.ssh/known_hosts, this will require resolution.  (Edit known_hosts and remove any entries corresponding to the hostname.)
+
+---
+
+# Generate an ssh key
+# ssh-keygen -t <type> -C <email address>
+# e.g.:
+ssh-keygen -t rsa -C justin.gries@gmail.com
+# Prompt for location/name of key to be generated; defaults to ~/.ssh/id_rsa
+# If you name your file anything other than "id_rsa" (default), you will need to add lines to /etc/ssh/ssh_config
+
+	# The first two are are normally the default, but you will need to explicitly declare them now...  Make sure to give the full path rather than a relative one.
+    	IdentityFile ~/.ssh/id_rsa
+    	IdentityFile ~/.ssh/id_dsa
+	# Add your new file(s) as well...
+    	IdentityFile ~/.ssh/ubuntu_sandbox_id_rsa
+    
+# Create the ".ssh" directory on the remote server:
+# "mkdir -p" makes parent directorys as needed
+ssh -p2222 jgries@sandbox.ubuntu.dev mkdir -p .ssh
+
+# copy over the public key into the "authorized_keys" file on the remote server
+cat ~/.ssh/ubuntu_sandbox_id_rsa.pub | ssh -p2222 jgries@sandbox.ubuntu.dev 'cat >> .ssh/authorized_keys'
+
+# Password-less authorization is now possible.
+# Add a config file to make using the port and username unnecessary
+# Create a config file
+touch ~/.ssh/config
+
+# Add lines as follow:
+# 	Host <Hostname>
+# 		Port <local-port>
+#		User <ssh-username>
+# e.g:
+	Host sandbox.ubuntu.dev
+	Port 2222
+	User jgries
+	IdentityFile ~/.ssh/ubuntu_sandbox_id_rsa
+
+Make sure you have proper permissions on ~/.ssh/config (chmod 600 config)

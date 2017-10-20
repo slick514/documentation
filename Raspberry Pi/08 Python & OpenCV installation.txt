@@ -1,0 +1,96 @@
+# Mostly pulled from http://www.pyimagesearch.com/2015/07/20/install-opencv-3-0-and-python-3-4-on-ubuntu/
+
+$ sudo apt-get update
+$ sudo apt-get upgrade
+
+# Raspberry Pi only...
+$ sudo rpi-update
+
+$ sudo apt-get install -y build-essential git cmake pkg-config
+$ sudo apt-get install -y libjpeg62-turbo-dev libtiff5-dev libjasper-dev libpng12-dev
+# In the following command, that is an "L" (lowercase), and not a "One" (1) in "libv4l-dev"
+$ sudo apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+$ sudo apt-get install -y libgtk2.0-dev
+$ sudo apt-get install -y libatlas-base-dev gfortran
+$ sudo apt-get install python3-pip python3-tk python-dev
+$ pip3 install pyserial
+
+
+# kIvy installation (python GUI development)
+$ pip3 install Cython
+$ sudo apt-get install --fix-missing libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-image-dev libsdl2-dev libsdl2-gfx-1.0-0 libsdl2-gfx-dev libsdl2-mixer-2.0-0 libsdl2-mixer-dev libsdl2-net-2.0-0 libsdl2-net-dev libsdl2-ttf-2.0-0 libsdl2-ttf-dev libav-tools libportmidi-dev zlib1g-dev
+$ sudo apt-get install python3-pil
+$ sudo apt-get install -y libgstreamer-plugins-base1.0-dev
+$ sudo apt-get install --fix-missing python-setuptools python-opengl 
+# THE FOLLOWING LINE IS NOT AN "INSTALL" COMMAND!  NOTE THE "BUILD-DEP" COMMAND!
+$ sudo apt-get build-dep python-pygame
+$ sudo apt-get install mercurial
+$ hg clone https://bitbucket.org/pygame/pygame
+$ cd pygame
+$ sudo python3 setup.py build
+$ sudo python3 setup.py install
+$ cd ../
+$ sudo rm -rf pygame
+$ sudo apt-get install -y python-gst0.10 python-gst0.10-dev python-enchant gstreamer0.10-plugins-good libgl1-mesa-dev libgles2-mesa-dev libgstreamer1.0-dev
+$ pip3 install spacy pygame kivy
+
+
+$ cd ~
+$ git clone https://github.com/Itseez/opencv.git
+$ git clone https://github.com/Itseez/opencv_contrib.git
+$ cd opencv
+# As of Apr, 2017, latest release was 3.2.0
+$ git checkout 3.2.0 
+$ cd ../opencv_contrib
+$ git checkout 3.2.0
+$ sudo apt-get install -y python3.4-dev libmysqlclient-dev python-mysqldb
+$ cd ~
+$ wget https://bootstrap.pypa.io/get-pip.py
+$ sudo python get-pip.py
+$ sudo pip install virtualenv virtualenvwrapper
+$ sudo pip3 install virtualenv virtualenvwrapper
+$ sudo rm -rf ~/.cache/pip
+
+# Edit your ~/.bashrc file
+# Append the following (3) lines to the end of the file:
+
+$ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.4
+$ export WORKON_HOME=$HOME/.virtualenvs
+$ source /usr/local/bin/virtualenvwrapper.sh
+
+# Force a reload of .bashrc
+$ source ~/.bashrc
+
+$ mkvirtualenv -p /usr/bin/python3.4 ~/.virtualenvs/cv
+$ workon cv
+# Be patient for this next command... it will look like it has stalled, but it has not
+$ pip install numpy scipy matplotlib mahotas scikit-learn
+$ pip install --egg http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.1.6.zip
+$ pip install -U scikit-image
+# If the .cache directory gives a "Permission denied" error, remove .cache/pip and reinstall numpy
+
+$ cd ~/opencv
+$ mkdir build
+$ cd build
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules -D BUILD_EXAMPLES=ON -D WITH_GSTREAMER=OFF ..
+
+# In the following command, 'x' will be replaced by a number indicating the number of processors that you have at your disposal.  e.g. "make -j4" for 4 processors
+$ sudo make -jx
+
+# At this point, you will be waiting for, like... forever (several hours) so find something else to do with your life.  If you need to disconnect/interrupt the make process for some reason, don't worry, you can kick things off again and it will carry on from where you left off.  (Make sure you run make from the ~/opencv/build directory)
+
+$ sudo make install
+$ sudo ldconfig
+
+# Verify that opencv is installed in /usr/local/lib/python3.4/site-packages.  Should look something like "cv2.cpython-34m.so"  Do note this filename, as you will be needing it shortly
+
+$ cd ~/.virtualenvs/cv/lib/python3.4/site-packages
+# In the following command, replace 'cv2.cpython-34m.so' with whatever your filename is...
+$ ln -s /usr/local/lib/python3.4/site-packages/cv2.cpython-34m.so cv2.so
+
+# Verify that things work
+$ workon cv
+$ python
+>>> import cv2
+>>> cv2.__version__
+'3.2.0'

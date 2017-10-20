@@ -1,0 +1,51 @@
+# Change directory to the content root
+cd /media/sf_sandbox
+
+# Download and decompress WordPress
+wget http://wordpress.org/latest.tar.gz
+tar -xzf latest.tar.gz
+...
+# Clean up the zip-file
+rm latest.tar.gz
+
+# Navigate to wordpress via the browser and go through the set-up
+# http:<hostname>:<port>/wordpress
+# user:		sandbox
+# database:	sandbox
+# password:	sandbox
+# host:		sandbox.ubuntu.dev
+# db-prefix:	_wp
+# Site-Title:	WordPress Sandbox
+# Username:	admin
+# Password:	admin
+# Email:		justin.gries@gmail.com
+
+# Finish + log-in
+
+# Install the Command Line Interface (CLI) for wordpress:
+# Navigate to the user's home directory
+cd ~
+
+# Get the source for the wordpress CLI and make it executable
+curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-cli.phar
+chmod +x wp-cli.phar
+
+# Move the file to an executable location
+sudo mv wp-cli.phar /usr/local/bin/wp
+
+# Navigate to the wordpress installation root
+cd /media/sf_sandbox/wordpress
+
+# We can now use wp to query information about wordpress from the command-line
+wp theme list
+# +----------------+----------+--------+---------+
+# | name           | status   | update | version |
+# +----------------+----------+--------+---------+
+# | twentyfifteen  | active   | none   | 1.3     |
+# | twentyfourteen | inactive | none   | 1.5     |
+# | twentythirteen | inactive | none   | 1.6     |
+# +----------------+----------+--------+---------+
+
+# Use "wp help" to find out more about the CLI options
+
+# Add link to the dashboard

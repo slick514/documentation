@@ -1,0 +1,4 @@
+BooleanVar
+DoubleVar
+IntVar
+StringVar

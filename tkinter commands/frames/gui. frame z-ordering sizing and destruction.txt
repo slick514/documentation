@@ -1,0 +1,42 @@
+Python 3.6.0 (v3.6.0:41df79263a11, Dec 23 2016, 07:18:10) [MSC v.1900 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> from tkinter import *
+>>> root = Tk()
+>>> window = Toplevel(root)
+>>> window.title('New Window')
+''
+>>> window.lower()
+>>> window.lower()
+>>> window.lift(root)
+>>> window.state('zoomed')
+''
+>>> # 'zoomed' expands window to max size
+>>> # 'withdrawn' hides the window.  Does not even show up in the task bar
+>>> window.state('withdrawn')
+''
+>>> # 'iconic' will still show the window in the taskbar
+>>> window.state('iconic')
+''
+>>> window.state('normal')
+''
+>>> window.state()
+'normal'
+>>> window.iconify()
+''
+>>> window.deiconify()
+''
+>>> # empty windows are 200x200 by default, when created
+>>> # geometry method
+>>> # window.geometry('<width(pixels)>x<height>+<x-pos>+<y-pos>')
+>>> # x-pos and y-pos indicates the position of the upper left corner of the window within the parent window/container
+>>> window.geometry('300x100+20+30')
+''
+>>> # we can prevent user resize of the window:
+>>> window.resizable(False, False) # x-resize?, y-resize?
+''
+>>> window.resizable(False, True)
+''
+>>> window.maxsize(640, 480)
+>>> window.minsize(200, 200)
+>>> root.destroy()
+>>> # destroys component, and children...

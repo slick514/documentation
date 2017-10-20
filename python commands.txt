@@ -1,0 +1,3 @@
+"len": for length of a string or list-type
+"range(x, y, z)": generates a list of numbers over [x, y), with a "z" interval
+"split": called on a string will create a list with words

@@ -1,0 +1,50 @@
+# Download Drush first, so that we can use it to install Drupal
+cd ~
+wget http://files.drush.org/drush.phar
+
+# Verify install
+php drush.phar core-status
+...
+
+# make drush executable, and move it to a 'bin' environment
+chmod +x drush.phar
+sudo mv drush.phar /usr/local/bin/drush
+
+# Make necessary changes to the bash startup file
+drush init
+
+# Use Drush to download Drupal to the sandbox root
+cd /media/sf_sandbox
+drush dl drupal-8.0.0 --drupal-project-rename=drupal
+... wait a long time...
+
+# Navigate to Drupal set-up in browser
+http://sandbox.ubuntu.dev:8082/drupal
+
+# Standard information:  "sandbox, sandbox, sandbox, etc..."
+# Remember to add a db-prefix ("drupal_") to avoid collisions.  This is under "Advanced" when setting the DB information.
+
+# Wait a long time...
+
+# username:pass 	-> admin:admin
+# email			-> justin.gries@gmail.com
+# etc...
+# Save & Continue
+
+# Wait more... done
+
+# Add the following lines to sites/default/default.settings.php (from the drupal root dir)
+#	$settings['trusted_host_patterns'] = array(
+#	'^localhost$',
+#	'^sandbox$',
+#	'^sandbox\.dev$',
+#	'^sandbox\.ubuntu\.dev$',
+#	);
+
+# Validate the installation:
+# Reports > Status Report
+
+# Add link to the dashboard.
+
+# to update Drupal, navigate to the Drupal-project root, and run the following
+drush pm-update

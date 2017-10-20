@@ -1,0 +1,4 @@
+* Create a DB for each project.  This will keep things organized, and will help if you need to import/export things later.
+* Make sure that the version (language) that a project/framework is written in is the same one that you are using.
+* Make sure that the hosting you will use supports the configuration that you are using.
+* Don't rely on "built-in" packages.  Read the official manuals for installation instructions

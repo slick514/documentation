@@ -1,0 +1,14 @@
+We set up the static IP so that we could easily SSH in to our pi, but what happens if a static address isn't available?  Perhaps you're at a trade-show, or you take your device home to tinker with it, and you're IP addressing scheme isn't the same...
+
+You can connect directly to your device via a CAT-5 (ethernet) cable, and SSH using a "local" domain.  For example, say you have a device called "mypi".  You have changed the device's host name to reflect this.  You can simply connect a cable and connect via ssh per the following:
+
+    ssh mypi.local
+
+(The interface will ask you for your username, and then the password if you enter that command.)
+
+Some caveats/notes:
+On a mac, and I assume on Linux, you can simply ssh from the bash shell.  If you've set things up properly in your /etc/hosts file, your security keys, and your ~/.ssh/config file, you should be able to log in simply by typing
+
+    ssh mypi.local
+
+On Windows, it's a bit more tricky.  Their implementation of Ubuntu and the bash shell is nice, but has some idiosyncrasies, and this is one of them.  You CAN ssh in, but you will need to use a client/utility for this rather than the built-in CLI/bash.  There are options that indicate that using keys is possible, but I have not been able to make this work yet...

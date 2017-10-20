@@ -1,0 +1,119 @@
+# Add the following line to /etc/profile to avoid the "-bash: __git_ps1: command not found""-message
+#	source /etc/bash_completion.d/git-prompt
+
+# Create an encryption key and move it to /tmp for access
+ssh-keygen -t rsa
+...
+cp ~/.ssh/id_rsa.pub /tmp/mykey.pub
+
+# Install git, gitweb, gitolite3, and highlight
+sudo apt-get install -y git gitweb gitolite3 highlight
+...
+during gitolite3 setup, reference the authentication key you just moved to /tmp/mykey.pub
+
+# Create the "git" user, and grant access to apache
+sudo adduser --system -shell /bin/bash --gecos 'Git SCM' --group --disabled-password git
+sudo usermod -aG git www-data
+sudo chmod g+r /home/git/projects.list
+
+# Configure gitolite3
+sudo dpkg-reconfigure gitolite3
+# change the admin user to 'git'
+# point the repo to '/home/git/repositories'
+# reference the public rsa key
+
+# Alter /etc/gitweb.conf
+#	$projectroot = "/home/git/repositories";
+#	...
+#	$projects_list = $projectroot;
+#	...
+#	# enable highlighting
+#	$feature{'highlight'}{'default'} = [1];
+
+# Alter the ".gitolite.rc" configuration file ("/home/git/.gitolite.rc")
+#	UMASK			=>	0027
+#	...
+#	GIT_CONFIG_KEYS	=>	'gitweb\.(owner|description|category)*'
+
+# enable the gitweb configuration and restart apache
+sudo a2enconf gitweb
+sudo a2enmod cgid
+sudo a2enmod cgi
+sudo service apache2 restart
+
+# add some user information
+git config --global user.name "Justin Gries"
+git config --global user.email "justin.gries@gmail.com"
+
+# Clone the repository that stores the gitolite configuration
+cd ~
+git clone git@localhost:gitolite-admin.git
+...
+
+# Add the host key so that access is available...
+cd ~/gitolite-admin
+cat ~/.ssh/authorized_keys >> keydir/jgries.pub
+
+# Alter conf/gitolite.conf
+#	repo		gitolite-admin
+#        		RW+     	=  	admin
+#        		R       	=  	gitweb
+#        		config gitweb.description = "gitolite administration"
+#
+#	repo    	testing
+#        		RW+     	=  	@all
+#
+#	repo    	dashboard
+#        		RW+     	= 	jgries
+#			R		=	gitweb
+#        		config gitweb.description = "Sandbox Dashboard"
+
+# Take a look at the git diff and status for the project
+git diff
+...
+git status
+...
+
+# Stage, commit, and push everything...
+git add -A
+...
+git commit -m "Added new user (jgries) and repository 'dashboard'; added gitweb permissions"
+...
+git push origin master
+...
+
+# Ensure the that "projects.list", and repository directory (and sub-files) are accessable
+sudo chmod 640 /home/git/projects.list
+sudo chmod -R 755 /home/git/repositories
+
+# Change the owner of the gitweb directory
+sudo chown -R git:git N/usr/share/gitweb
+
+# Change the following variables in /usr/share/gitweb/gitweb.cgi
+#	$projectroot = "/home/git/repositories";
+#	...
+#	$projects_list = "/home/git/projects.list";
+
+# Navigate (browser) to sandbox:8082/gitweb to view repositories
+
+# The following commands can be used from the host machine to verify connectivity
+ssh -v git@sandbox.ubuntu.dev
+...
+ssh git@sandbox.ubuntu.dev info
+
+# Check /var/log/apache2/dev-error.log in case of "404 Error (not found)".  It's probably an access/perms thing...
+
+# To make things more readable, let's use a different gitweb theme:
+cd /usr/share/gitweb
+sudo mv static original
+sudo git clone git://github.com/kogakure/gitweb-theme.git static
+
+# we're missing a file...
+sudo mv original/gitweb.js static/gitweb.js
+
+# Refresh the browser to see the style changes...
+
+# Restart the (virtual) server and then stage a git commit to test that umask was set properly;  If the umask is not working, things will "disappear" from the gitweb interface after a commit, because they will not be readable.
+# If things don't work, try
+umask 0027
+# or, look at /home/git/.gitolite.rc for the umask config.  Also, /etc/login.defs.  Dog help you...

@@ -1,0 +1,28 @@
+# Symfony is a PHP Web-Application framework for MVC applications
+
+# use composer to create the symfony project
+composer create-project symfony/framework-standard-edition /media/sf_sandbox/symfony
+...
+# wait a long time...
+...
+# Provide information for the install
+# Database Host			-> localhost
+# DB Port					-> (null)
+# DB Name, user, password	-> sandbox
+# ...defaults...
+# secret: 				-> gibberish...
+
+# Install complete
+
+# Create the symfony project in an IDE and open "Source\ Files/web/app_dev.php"
+
+# Replace the "if (isset...)"-content with the following
+#	$allowed_sites = array(
+#	    	'sandbox.ubuntu.dev',
+#	    	'sandbox.dev',
+#		'sandbox',
+#	);
+#	if(!in_array(strtolower($_SERVER['SERVER_NAME']), $allowed_sites)){
+#	...
+
+# Navigate to "sandbox:8082/symfony/web/app_dev.php" to test site

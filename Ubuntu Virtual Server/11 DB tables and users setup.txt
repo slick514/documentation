@@ -1,0 +1,22 @@
+# From phpMyAdmin (sandbox.ubuntu.dev:8082/phpmyadmin)
+# 	* Add a user. 
+#		* Navigate: Server:localhost > Users
+#		* Click "Add User"
+#		* Fill fields in "Login Information" section:
+#			* User name: dashboard
+#			* Host: % 
+#				% = 'any'
+#			* Password: dashboard
+#			* confirm password
+#		* Under Database for user:
+#			* Check "Create database with same name and grant all privileges"
+#		* Click "Go"
+#	* Repeat for user "sandbox", with password "sandbox"
+#	* Click "reload the privileges"-text from the note at the bottom of the Users tab.
+
+# Populate the "dashboard" database:
+#	* Create a table "shortcuts", with three columns
+#	* Configure the colums as follows:
+#		1. Name -> id ; Type -> INT ; Index -> PRIMARY ; Check "A_I" (Auto-increment)
+#		2. Name -> path ; Type -> VARCHAR ; Length -> 255
+#		3. Name -> label ; Type -> VARCHAR ; Length -> 255

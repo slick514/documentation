@@ -1,0 +1,64 @@
+# Apache user (www-data) must also have access to the shared folder, so we will add that user to the vboxsf group as well (log out/in after, for changes to take effect.)
+sudo usermod -a -G vboxsf www-data
+
+# add a new apache configuration file for dealing with our shared folder to those listed in "sites-available"
+sudoedit /etc/apache2/sites-available/vboxsf.conf
+
+# File content as follows:
+# <VirtualHost *:80 *:8080 *:8082>
+#   ServerName sandbox
+#   ServerAlias *.dev
+#
+#   LogLevel info
+#   ErrorLog ${APACHE_LOG_DIR}/dev-error.log
+#   CustomLog ${APACHE_LOG_DIR}/dev-access.log combined
+#
+#   RewriteEngine On
+#
+#   <Directory />
+#     Options FollowSymLinks
+#     AllowOverride All
+#   </Directory>
+#
+#   <Directory /media/>
+#     Order allow,deny
+#     Allow from all
+#     Require all granted
+#   </Directory>
+#
+#   <Location /server-status>
+#     SetHandler server-status
+#     Order allow,deny
+#     Allow from all
+#     Require all granted
+#   </Location>
+#
+#  UseCanonicalName Off
+#  VirtualDocumentRoot /media/sf_%1
+# </VirtualHost>
+
+# We need to enable listening on port 8080 so that requests made within apps to themselves will work
+sudoedit /etc/apache2/ports.conf
+
+# add an additional "Listen"-line under "Listen 80", for port 8080:
+# unsure if we also need the forwarded port from the host system as well?  Does "UseCanonicalName = Off" cause self-references to use 8080, or to use the forwarded port?
+#	...
+#	Listen 80
+# 	Listen 8080
+#	Listen 8082
+#	...
+
+# enable/disable appropriate apache sites
+sudo a2ensite vboxsf
+sudo a2dissite 000-default
+# enable URL-rewriting
+sudo a2enmod rewrite
+# support serving multiple shared folders
+sudo a2enmod vhost_alias
+# add a window into what the webserver is doing
+sudo a2enmod status
+# restart the server (apache) for changes to take effect
+sudo service apache2 restart
+
+# Apache should now be available at "http://<server host-name>:<forwarded-port>/server-status" from the host.
+# e.g.: http://sandbox.ubuntu.dev:8082/server-status

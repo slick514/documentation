@@ -1,0 +1,21 @@
+# Composer is used for PHP dependency management
+
+# navigate to the home direcory 
+cd ~
+# get the latest installer and pipe it to php for execution
+curl -sS https://getcomposer.org/installer | php
+
+# move composer to a location where it can be used by all users on the system:
+sudo mv composer.phar /usr/local/bin/composer
+
+# verify installation
+composer about
+
+# at any time, update composer:
+composer selfupdate
+
+# Allow composer to install commands from within the user's account
+sed -i '1i export PATH="$HOME/.composer/vendor/bin:$PATH"' $HOME/.bashrc
+
+# Load the new path information
+source $HOME/.bashrc

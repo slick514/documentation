@@ -1,0 +1,31 @@
+# Shut-down (graceful)
+sudo shutdown -h now
+
+# Secure-Shell connection
+# ssh -p<port on remote system> <user>@<hostname>
+ssh -p2222 jgries@sandbox.ubuntu.dev
+
+# Reboot
+sudo reboot
+
+# show the status of modules
+lsmod
+
+# print user-id and group information for the current user
+id
+
+# query linux' administrative databases
+# learn who's in a group:
+getent group <group-name>
+# output format is: <group-name>:<group-password>:<group-number>:<list of users in group>
+
+# add a user to a group
+# usermod -a -G <group-name> <username>
+usermod -a -G somegroup myUser
+
+# show all enabled PHP modules
+php5query -M
+
+# get web content and print to standard output
+wget <web-address> -O-
+

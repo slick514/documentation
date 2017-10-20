@@ -1,0 +1,29 @@
+>>> from tkinter import *
+>>> from tkinter import ttk
+>>> root = Tk()
+>>> entry = ttk.Entry(root, width = 30)
+>>> entry.pack()
+>>> entry.get()
+'something...'
+>>> # do NOT do this, as you will not be able to call "get()" on he resulting entry object
+>>> entry2 = ttk.Entry(root, width = 30).pack()
+>>> entry2.get()
+Traceback (most recent call last):
+  File "<pyshell#8>", line 1, in <module>
+    entry2.get()
+AttributeError: 'NoneType' object has no attribute 'get'
+>>> # Delete the first character
+>>> entry.delete(0, 1)
+>>> # Delete everything...
+>>> entry.delete(0, END)
+>>> entry.insert(0, 'Enter your password')
+>>> # Hide the text
+>>> entry.config(show = '*')
+>>> entry.get()
+'Enter your password'
+>>> entry.state(['disabled'])
+('!disabled',)
+>>> entry.state(['!disabled'])
+('disabled',)
+>>> entry.state(['readonly'])
+('!readonly',)

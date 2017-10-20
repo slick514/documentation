@@ -1,0 +1,7 @@
+Follow the directions found here:
+
+https://www.raspberrypi.org/documentation/installation/noobs.md
+
+If you have a microSD card that SHOULD have enough room, and it won't take the files, re-format it and try again.
+
+That's it.  Good luck; we're all counting on you...

@@ -1,0 +1,38 @@
+check out this link
+http://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter/4140988#4140988
+
+
+# valid percent substitutions (from the Tk entry man page)
+# note: you only have to register the ones you need;
+# In this example, we are only registering '%P'
+#
+# %d = Type of action (1=insert, 0=delete, -1 for others)
+# %i = index of char string to be inserted/deleted, or -1
+# %P = value of the entry if the edit is allowed
+# %s = value of entry prior to editing
+# %S = the text string being inserted or deleted, if any
+# %v = the type of validation that is currently set
+# %V = the type of validation that triggered the callback
+#      (key, focusin, focusout, forced)
+# %W = the tk name of the widget
+
+
+example code:
+
+...
+	def populate_configuration_dialogue(self, root):
+		text = StringVar()
+		text.set(self.too_few_threshold)
+		self._threshold_entry = ttk.Entry(root, textvariable=text, validate="key")
+		self._threshold_entry['validatecommand'] = (self._threshold_entry.register(enforce_numeric), '%P')
+		self._threshold_entry.pack()
+		self._threshold_entry.textVar = text # make sure the reference isn't deallocated
+...
+
+def enforce_numeric(proposed_value):
+	try:
+		float(proposed_value)
+		valid = True
+	except ValueError:
+		valid = proposed_value in ('.', '')
+	return valid

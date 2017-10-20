@@ -1,0 +1,5 @@
+# create a common virtual-machine "appliance" for sharing a configuration with multiple people
+# virtual machine must be powered off
+
+
+# you can use vagrant for "Provisioning" (creating a dev environment off of a base "box"/template)

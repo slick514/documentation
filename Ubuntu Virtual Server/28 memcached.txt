@@ -1,0 +1,10 @@
+# Memcached is a caching backend: A way of storing data in-memory for quick retrieval (no DB calls)
+# Default port is 11211
+
+# Install memcached (server and php extension)
+do apt-get install memcached php5-memcached
+
+# test to see if things are working ("nc" = "netcat")
+echo "stats settings" | nc localhost 11211
+
+# configuration file is "/etc/memcached.conf".  Restart apache if you make changes.

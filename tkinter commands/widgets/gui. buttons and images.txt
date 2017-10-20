@@ -1,0 +1,35 @@
+import required libraries
+	from tkinter import *
+	from tkinter import ttk
+
+creating a base/'root' window
+	root = Tk()
+
+creating a button
+	button = ttk.Button(root, text = 'Whatever...')
+
+actually displaying the button
+	button.pack()
+
+simulate a button click via command:
+	button.invoke[]
+
+creating/using a callback:
+	def cb():
+		print('clicked')
+	button.config(command = cb)
+	
+disabling (greying out) components:
+	button.state(['disabled'])
+
+Create the reference to the image as a part of the parent object.  This will preclude the possibility of garbage collection when things move out of scope
+	button.img = PhotoImage(file = '<file path>')
+	button.config(image = button.img)
+
+add the image to the button...
+setting "compound = LEFT" overlays the text on top of the image, with the image to the left...
+	button.config(image = logo, compound = LEFT)
+	
+Make your image smaller, to fit!
+"logo_reference.subsample(x, y)" will take every "x"th pixel on the x axis, and every "y"th pixel on the y axis....
+	small_logo = logo.subsample()

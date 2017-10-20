@@ -1,0 +1,33 @@
+# CakePHP is an application framework
+
+# Download/install using composer
+cd /media/sf_sandbox
+composer create-project --prefer-dist cakephp/app cakephp
+... wait ...
+
+# cakePHP does not presently (v.3) support table-prefixes, so use phpmyadmin to create a new mysql User and corresponding database:
+# user: 		cakephp
+# password: 	cakephp
+
+# Alter /cakephp/config/app.php
+# 	* Add lines to the Datasources->default, and Datasources->test arrays that correspond to the database created
+
+# Alter /cakephp/vendor/cakephp/cakephp/src/Utility/Security.php
+# 	* Add/Change the security salt
+#		protected static $_salt = 'somelongalphanumericstring';
+
+# Alter /cakephp/vendor/cakephp/cakephp/src/Core/Configure.php
+# 	* enable debugging by changing debug to true:
+#		'debug' => true
+
+# DebugKit uses SQLite and stores debugging info in a db located in the app's /tmp directory
+sudo apt-get install -y sqlite
+... output + wait ...
+
+# Enable DebugKit
+bin/cake plugin load DebugKit
+
+# Go to cakephp in your browser:  Verify that everything is working correctly at the bottom of the screen.
+# "sandbox:8082/cakephp"
+
+# Add a shortcut, on the dashboard

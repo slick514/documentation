@@ -1,0 +1,11 @@
+# PEAR is used to download and update PHP components.  Losing popularity to some degree
+
+# Install PEAR and php5 developer tools
+sudo apt-get install -y php-pear php5-dev
+...
+
+# verify installation
+which pear
+...
+pear
+...

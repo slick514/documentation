@@ -1,0 +1,38 @@
+# primary mysql configuration file is in /etc/mysql/my.cnf
+# This in turn reads in configuration information from any ".cnf" files in the directories "/etc/mysql/conf.d/" and "/etc/mysql/mysql.conf.d/"
+# /etc/mysql/mysql.conf.d/mysqld.cnf has most of the configuration information that we want to look at...
+# Add the following lines after "skip-external-locking"
+#	collation-server = utf8_unicode_ci
+#	character-set-server = utf8
+
+# By default, mysql only listens to localhost connections.  To change this so that we can connect from the host OS, change the bind-address as shown.  This allows connection from any address:
+# 	bind-address = 0.0.0.0
+
+# Add support for slow query logging:
+# 	slow_query_log 	= 1
+#	slow_query_log_file = /var/log/mysql/mysql-slow.log
+#	...
+#	long_query_time	= 2
+
+# Any instances of "key_buffer" should be changed to "key_buffer_size"
+
+# Restart mysql for changes to take effect
+sudo service mysql restart
+
+# NEVER DO THIS ON PRODUCTION!
+# Change mysql root permissions to allow connection from anywhere
+# Login to mysql
+mysql -uroot -p
+
+# From mysql prompt
+UPDATE mysql.user SET host='%' WHERE user='root' AND host='sandbox';
+FLUSH PRIVILEGES;
+exit;
+
+# Log in using MySql Workbench (or similar)
+# * Add a connection
+# * Fill in the following:
+# 	* hostname (sandbox.ubuntu.dev)
+# 	* port (forwarded port = 9306)
+#	* click "Store in Keychain" to add root password to keychain and avoid prompt
+#	* Test Connection to verify things, and check out "server status"...

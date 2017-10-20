@@ -1,0 +1,74 @@
+Ok, so at this point, you should have a Pi set up that you can log in to remotely via either a VNC connection and/or via SSH.  I prefer SSH, as it is both more secure, and a lot faster, however, you are limited to the CLI with SSH, whereas you have a GUI with VNC...
+
+Let's start tinkering with the General Purpose Input/Output (GPIO) on the Pi.
+These are the metal pins that you see on the device, on older versions, there were 26 pins, and there are 40 on the newer versions.  The pinouts/purposes for those first 26 pins are consistent on all devices.
+
+It helps to have a breakout board when tinkering with the GPIO.  This will make wiring things up a lot easier, vs trying to attach things directly to the pins.  Attaching things directly to the pins is an easy way to short out your device, so... don't.
+
+We will be sending and receiving values to the GPIO programatically, so first we need to download and setup the tools that we will need.  
+From the CLI, do the following:
+
+Install GIT
+    sudo apt-get install git-core -y
+    ...
+    {output}
+    ...
+    sudo apt-get update -y
+    ...
+    {output... give it a couple of minutes...}
+    ...
+    sudo apt-get upgrade -y
+
+Create a directory for your project(s) and navigate into it
+    mkdir ~/projects
+    cd ~/projects
+
+Clone the wiringPi project, grab the latest and greatest release, and build the project
+
+    git clone git://git.drogon.net/wiringPi
+   
+    ...{output}...
+
+    cd wiringPi
+    git pull origin
+    
+    ... {output} ...
+    
+    ./build
+
+    ...{output}...
+    
+Test the installation:
+
+    gpio -v
+    {You should see some basic information about your Pi}
+    gpio readall
+    {You should see a pin-out diagram.  Line wrapping may make things confusing; widen your CLI window until things are clear.}
+
+The "readall" command is useful.  This is a snapshot of "right now.  Out of the box, all pins are configured as inputs (IN), and you might be confused as to why some are reading "high" (1) if nothing is hooked up to them.  Inputs that are not pulled down to ground or pulled up to a voltage source are "floating", which means that they might either be 0 or 1...
+
+I recommend putting together a setup similar to that shown on pages 26 and 27 of the mcm-electronics documentation:
+http://www.mcmelectronics.com/content/ProductData/Manuals/83-16333.pdf
+The pin numbers on page 26 are a little wonky.  Check out the picture on page 27 for a clear idea of which pins you need to hook into
+
+To turn on a pin (output 3.3V DC) you will need to set the pin's mode to "out", and then turn it on.  For example to turn on Pin 7:
+
+    gpio -g mode 7 out
+    gpio -g write 7 1
+
+To turn it off...
+
+    gpio -g write 7 0
+
+Using either the "gpio readall" command, an LED setup, or a multimeter, you can verify that what you expect to happen is actually happening.  Note, that for "gpio readall" the pin number used ("7", in this case) corresponds to the "BCM" column...
+
+Something to note: Upon reboot of the device, pin "modes" revert to initial states.  It's probably wise for software that utilizes GPIO to verify on initialization that things are configured properly...
+
+Please DO ensure that your inputs and outputs are protected properly to prevent frying your Pi.  The GPIO IO pins are not current limited internally!
+https://www.scribd.com/doc/101830961/GPIO-Pads-Control2
+
+run an apt-get upgrade to upgrade your wiringpi setup...
+
+    sudo apt-get upgrade -y
+
+There. You're working directly with the IO.  On to neat things!

@@ -1,0 +1,26 @@
+# Install the optional component for graphing out function call relationships:
+sudo apt-get install -y graphviz
+...
+
+# Install webgrind via clone from github
+cd /media/sf_sandbox
+git clone https://github.com/jokkedk/webgrind.git
+...
+nano webgrind/config.php
+
+# Make changes to the following lines/variables
+#	static $profilerDir = '/tmp/cachegrind';
+#	...
+#	static $defaultTimezone = 'America/Los_Angeles';
+#	...
+#	static $dotExecutable = '/usr/bin/dot';
+
+# Restart Apache
+
+# Create a shortcut on the dashboard for webgrind (/webgrind)
+
+# Navigate to drupal, (or another php application) and append "?XDEBUG_PROFILE=1" to the end of the URL.  This creates a profile that we can use with Webgrind
+
+# Bring up webgrind
+# Select the profile and click "update"
+# You can now see all the calls that were made, and a bunch of information.  Click "Show Callgraph" to see a flowchart

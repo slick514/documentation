@@ -1,0 +1,66 @@
+Go get the latest version of Java
+http://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+Commands to purge your present system and set up the new directory:
+$ sudo apt-get purge openjdk-\*
+$ sudo mkdir -p /usr/local/java
+$ cd ~/Downloads
+
+... wait for the download to complete... take note of the file name.
+YOUR FILENAME WILL PROBABLY BE DIFFERENT THAN THIS ONE
+$ ls l
+...
+-rw-r--r-- ...more-stuff... jdk-8u131-linux-x64.tar.gz
+...
+
+Move this file to your java folder:
+$ sudo mv jdk-8u131-linux-x64.tar.gz /usr/local/java/
+
+Unpack the file and add a link...:
+$ sudo tar -xvf jdk-8u131-linux-x64.tar.gz
+... lots of output will happen ...
+$ ls -l
+drwxr-xr-x ...more-stuff... jdk1.8.0_131
+-rw-r--r-- ...more-stuff... jdk-8u131-linux-x64.tar.gz
+$ ln -s jdk1.8.0_131 java_8
+$ ls -l
+lrwxrwxrwx ...more-stuff... java_8 -> jdk1.8.0_131
+drwxr-xr-x ...more-stuff... jdk1.8.0_131
+-rw-r--r-- ...more-stuff... jdk-8u131-linux-x64.tar.gz
+
+Add the following lines to the /etc/profile file (will require 'sudo'):
+
+JAVA_HOME=/usr/local/java/java_8
+JRE_HOME=$JAVA_HOME/jre
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+export JAVA_HOME
+export JRE_HOME
+export PATH
+
+$ sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/java/java_8/bin/java" 1
+$ sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/java/java_8/bin/javac" 1
+$ sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/java/java_8/bin/javaws" 1
+$ sudo update-alternatives --set java /usr/local/java/java_8/bin/java
+$ sudo update-alternatives --set javac /usr/local/java/java_8/bin/javac
+$ sudo update-alternatives --set javaws /usr/local/java/java_8/bin/javaws
+
+The permissions are wonky... user: 'uucp', group: '143'  ???
+$ sudo chown -R root:staff jdk1.8.0_131
+
+OR (or!) run this script:
+
+sudo apt-get install -y oracle-java8-jdk
+cd /usr/lib/jvm
+jdk_path=$(pwd)/$(ls | grep jdk-8)
+if grep -Fxq "JAVA_HOME=$jdk_path" /etc/profile
+then
+	echo 'java path already set in /etc/profile'
+else
+	sudo echo "JAVA_HOME=$jdk_path" >> /etc/profile
+	sudo echo 'JRE_HOME=$JAVA_HOME/jre' >> /etc/profile
+	sudo echo 'PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin' >> /etc/profile
+	export JAVA_HOME
+	export JRE_HOME
+	export PATH
+	echo 'java path added to /etc/profile'
+fi

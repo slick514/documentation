@@ -1,0 +1,15 @@
+http://www.instructables.com/id/Read-and-write-from-serial-port-with-Raspberry-Pi/
+
+That's a fairly simple walk-through that uses python to send data out on the GPIO and read it in from one of the USB ports.  If you don't have the RS-232 connector/adapter (I didn't), you can jury-rig a cable from a standard USB cable fairly easily.  The GPIO pins 4, 6, 8, and 10 are the pin numbers (physical) that we are using, with the power provided by 4 (5V) and 6 (GND), and the logic being transferred on 8 (TxD) and 10 (RxD).  
+
+8 and 10 are the "UART" pins 
+https://en.wikipedia.org/wiki/Universal_asynchronous_receiver/transmitter
+
+The color of the wires should indicate which wires go where.  (Check out almost any of the USB wiring images that you can find online)
+
+Some notes:
+I didn't find that disabling the serial port was necessary
+
+My serial connection was on ttyS0, not ttyAMA0.  This may be why I didn't need to disable the serial port...
+
+If you get stuck, ask me for help!

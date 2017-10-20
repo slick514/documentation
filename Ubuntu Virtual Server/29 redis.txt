@@ -1,0 +1,20 @@
+# Redis is a free, open-source key-value store, that can be used as a caching backend
+# Similar to memcached, but it stores more than strings, and offers persistence
+# Available on all demo'd PHP frameworks/CMSs
+# Default port: 6379
+
+# Installation
+sudo apt-get install -y redis-server php5-redis
+...
+
+# restart Apache: Redis is now running
+
+# verify install:
+redis-cli
+info
+...
+exit
+
+# config located in /etc/redis/redis.conf
+# if you update the configuration file, you will need to restart redis
+sudo service redis-server restart

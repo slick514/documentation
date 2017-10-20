@@ -1,0 +1,62 @@
+* Obtain a static ip address from IT.  You may wish to ask around the office to see if anyone has already obtained a block of IP addresses for use in testing.
+
+The file /etc/wpa_supplicant/wpa_supplicant.conf will be created/modified by the recommended setup methods, (When you setup your wifi connection via the GUI), but can be setup by hand. It should contain something like the following:-
+
+  ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+  update_config=1
+
+  network={
+      ssid="<Your SSID>"
+      scan_ssid=1
+      psk="<Your_wifi_password>"
+      key_mgmt=WPA-PSK
+  }
+
+If you need to connect to a private network (i.e. no broadcast SSID) include the line scan_ssid=1 inside network={⋯}.
+
+NOTE If you want to connect to different networks (e.g. at work or home) you can include multiple network={⋯} entries.
+There are many other options which can be used see man wpa_supplicant.conf.
+
+Setup a Static IP Address
+Run either of the following (depending on whether you are using Ethernet or WiFi):
+
+  ip -4 addr show dev eth0 | grep inet
+  ip -4 addr show dev wlan0 | grep inet
+
+which should give an output like:
+
+  inet 10.1.1.30/24 brd 10.1.1.255 scope global eth0
+  inet 10.1.1.31/24 brd 10.1.1.255 scope global wlan0
+
+The first address is the IP address of your Pi on the network, and the part after the slash is the network size. It is highly likely that yours will be a /24.
+
+The second address is the brd (broadcast) address of the network.
+
+Find the address of your router (or gateway)
+
+  ip route | grep default | awk '{print $3}'
+
+Finally note down the address of your DNS server, which is often the same as your gateway.
+
+  cat /etc/resolv.conf
+
+Edit /etc/dhcpcd.conf as follows:-
+
+  interface eth0
+  static ip_address=10.1.1.30/24
+  static routers=10.1.1.1
+  static domain_name_servers=10.1.1.1
+
+  interface wlan0
+  static ip_address=10.1.1.31/24
+  static routers=10.1.1.1
+  static domain_name_servers=10.1.1.1
+  
+"ip_address" is the address and size from the command above (or another unused address on the same network),
+"routers" is the address of your router (or gateway).
+"domain_name_servers" is the DNS address(es) from /etc/resolv.conf.
+(see man dhcpcd.conf)
+
+There is a good article on dhcpcd at https://wiki.archlinux.org/index.php/dhcpcd The Fallback profile is an alternative to static IP
+
+Restart your Pi;  running "ifconfig" should yield your static address(es)
